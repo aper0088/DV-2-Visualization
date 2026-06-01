@@ -1,0 +1,60 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+    "text": "Public Transport Commuter Count (2011-2021)",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "Public transport, 2011 to 2021.csv",
+    "format": {
+      "type": "csv",
+      "parse": {"2011": "string", "2016": "string", "2021": "string"}
+    }
+  },
+  "transform": [
+    {
+      "fold": ["2011", "2016", "2021"],
+      "as": ["Year", "Raw_Count"]
+    },
+    {
+      "calculate": "toNumber(replace(datum.Raw_Count, ',', ''))",
+      "as": "Commuter Count"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "point": true},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "Commuter Count", "type": "quantitative"},
+        "color": {
+          "field": "Mode of transport",
+          "type": "nominal",
+          "scale": {
+            "range": ["#228B22", "#800080", "#DC143C", "#DAA520", "#2F4F4F"]
+          }
+        },
+        "tooltip": [
+          {"field": "Mode of transport", "type": "nominal"},
+          {"field": "Year", "type": "ordinal"},
+          {"field": "Commuter Count", "type": "quantitative", "format": ",.0f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text", 
+        "text": "2021 decrease due to COVID", 
+        "font": "Inter",
+        "fontSize": 16, 
+        "color": "black",
+        "align": "left",
+        "dx": 105,
+        "dy": -70
+      }
+    }
+  ]
+}

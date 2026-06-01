@@ -1,0 +1,69 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+    "text": "Metropolitan Vs Regional Train Commuter Count (2020-2025)",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+  "width": 600,
+  "height": 400,
+  "data": { 
+    "url": "74174b02-76bc-4d10-ae7c-401d90ef033c.csv",
+    "format": {"type": "csv", "parse": {"Metropolitan train": "string", "Regional train": "string"}}
+  },
+  "transform": [
+    {"filter": "datum.Year >= 2020 && datum.Year <= 2025"},
+    {
+      "calculate": "toNumber(replace(datum['Metropolitan train'], /,/g, ''))",
+      "as": "Metro"
+    },
+    {
+      "calculate": "toNumber(replace(datum['Regional train'], /,/g, ''))",
+      "as": "Regional"
+    },
+    {
+      "aggregate": [
+        {"op": "sum", "field": "Metro", "as": "Metro Trains"},
+        {"op": "sum", "field": "Regional", "as": "Regional Trains"}
+      ],
+      "groupby": ["Year"]
+    },
+    {
+      "fold": ["Metro Trains", "Regional Trains"],
+      "as": ["Service_Type", "Commuter Count"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "point": true},
+      "encoding": {
+        "x": {"field": "Year", "type": "ordinal"},
+        "y": {"field": "Commuter Count", "type": "quantitative"},
+        
+        "color": {"field": "Service_Type", "type": "nominal"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text", 
+        "text": "Increase in both Metro and Regional commuters", 
+        "font": "Inter",
+        "fontSize": 16, 
+        "color": "black",
+        "dx": 110, 
+        "dy": -15
+      }
+    },
+        {
+      "mark": {
+        "type": "text", 
+        "text": "Small increase from 2020 to 2021 due to COVID", 
+        "font": "Inter",
+        "fontSize": 16, 
+        "color": "black",
+        "dx": -130, 
+        "dy": 100
+      }
+    }
+  ]
+}

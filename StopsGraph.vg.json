@@ -1,0 +1,91 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 800,
+  "height": 550,
+  "title": {
+    "text": "Train Station Distribution In Victoria",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+  "projection": {
+    "type": "mercator",
+    "center": [144.96, -37.81],
+    "scale": 6000
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "LGA_POLYGON.json",
+        "format": {"type": "topojson", "feature": "LGA_POLYGON"}
+      },
+      "transform": [
+        {
+          "lookup": "properties.ABSLGACODE",
+          "from": {
+            "data": {
+              "url": "FINAL_lga_services_per_10k_edit_1.csv",
+              "format": {"parse": {"ABSLGACODE": "string"}}
+            },
+            "key": "ABSLGACODE",
+            "fields": ["Region_Type"]
+          }
+        }
+      ],
+      "mark": {"type": "geoshape", "stroke": "#ffffff", "strokeWidth": 0.5},
+      "encoding": {
+
+        "color": {
+  "field": "Region_Type",
+  "type": "nominal",
+  "scale": {
+    "domain": ["Metro", "Regional"],
+    "range": ["#AADDFF", "#FFDDAA"]
+  }, 
+            "legend": {"title": "Region Type"}
+
+},
+       
+        "tooltip": [
+          {"field": "properties.LGA_NAME", "title": "LGA"},
+          {"field": "Region_Type", "title": "Type"}
+        ]
+      }
+    },
+    {
+      "data": {"url": "TrainStops.csv"},
+      "transform": [{"filter": "datum.location_type == '1'"}],
+      "mark": {
+        "type": "circle",
+        "size": 15,
+        "color": "#ffffff",
+        "stroke": "#ff4d4d",
+        "strokeWidth": 1.5,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "longitude": {"field": "stop_lon", "type": "quantitative"},
+        "latitude": {"field": "stop_lat", "type": "quantitative"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"name": "Melbourne CBD", "lon": 144.963, "lat": -37.813},
+          {"name": "Geelong", "lon": 144.35, "lat": -38.15},
+          {"name": "Mornington", "lon": 145.03, "lat": -38.22},
+          {"name": "Ballarat", "lon": 143.85, "lat": -37.56},
+          {"name": "Bendigo", "lon": 144.28, "lat": -36.76},
+          {"name": "Traralgon", "lon": 146.54, "lat": -38.20},
+          {"name": "Warrnambool", "lon": 142.48, "lat": -38.38}
+
+        ]
+      },
+      "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "#333", "dy": -10},
+      "encoding": {
+        "longitude": {"field": "lon", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "text": {"field": "name", "type": "nominal"}
+      }
+    }
+  ]
+}

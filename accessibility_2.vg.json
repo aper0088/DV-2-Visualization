@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 600,
+  "height": 300,
+  "title": {
+    "text": "Average Wait Time: Weekend",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+
+  "data": {"url": "accessibility.csv"},
+  "transform": [
+    {"filter": "datum.Day == 'Weekend'"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "point": true},
+      "encoding": {
+        "x": {
+          "field": "hour",
+          "type": "quantitative",
+          "title": "Hour",
+          "scale": {"domain": [0, 24]}
+        },
+        "y": {
+          "field": "avg_wait_time",
+          "type": "quantitative",
+          "title": "Avg Wait Time (Minutes)",
+          "scale": {"domain": [0, 20]}
+        },
+"color": {
+  "field": "Region_Type",
+  "type": "nominal",
+  "scale": {
+    "domain": ["Metro", "Regional"],
+    "range": ["#0077BB", "#EE7733"]
+  }
+},  
+      "tooltip": [
+          {"field": "hour", "type": "quantitative", "title": "Hour"},
+          {"field": "Region_Type", "type": "nominal", "title": "Region"},
+          {"field": "avg_wait_time", "type": "quantitative", "title": "Wait Time (min)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 16, 
+        "align": "left",
+        "baseline": "top",
+        "dx": 10,
+        "dy": 10,
+        "text": "Regional average weekend wait times are generally higher, peaking at 2AM "
+      },
+      "encoding": {
+        "x": {"value": 0},
+        "y": {"value": 0}
+      }
+    }
+  ]
+}

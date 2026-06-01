@@ -1,0 +1,77 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+    "text": "Population Vs Weekly Train Services",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+
+  "width": 700,
+  "height": 500,
+  "data": { "url": "FINAL_lga_services_per_10k_edit_1.csv" },
+  "layer": [
+    {
+      "transform": [
+        {"filter": "datum.weekly_avg_services > 0"}
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.7,
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "x": {
+          "field": "population",
+          "type": "quantitative",
+          "title": "Population"
+        },
+        "y": {
+          "field": "weekly_avg_services",
+          "type": "quantitative",
+          "title": "Average Weekly Train Services"
+        },
+        "color": {
+          "field": "Region_Type",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Metro", "Regional"],
+            "range": ["#0077BB", "#EE7733"]
+          }
+        },
+        "size": {
+          "field": "actual_stop_count",
+          "type": "quantitative",
+          "title": "Train Stop Count",
+          "scale": {
+            "range": [20, 2000],
+            "type": "sqrt"
+          }
+        },
+        "tooltip": [
+          {"field": "LGA_NAME", "type": "nominal", "title": "LGA"},
+          {"field": "Region_Type", "type": "nominal", "title": "Region Type"},
+          {"field": "population", "type": "quantitative", "format": ","},
+          {"field": "weekly_avg_services", "type": "quantitative", "format": ".1f"},
+          {"field": "actual_stop_count", "type": "quantitative", "title": "Train Stops"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "text": "Some Regional LGAs have a greater population but less train services",
+        "fontSize": 16,
+        "font": "Inter",
+        "color": "black",
+        "align": "left",
+        "dx": 10,
+        "dy": 50
+      },
+      "encoding": {
+        "x": {"value": 100},
+        "y": {"value": 100}
+      }
+    }
+  ]
+}

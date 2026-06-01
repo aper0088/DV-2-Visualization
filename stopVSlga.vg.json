@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+    "text": "Top 10 LGAs By Stop Count",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+
+
+  "data": {"url": "top_20_lga.csv"},
+  "height": 400,
+  "width": 600,
+  "encoding": {
+    "x": {
+      "field": "LGA_NAME",
+      "type": "nominal",
+      "sort": {"field": "actual_stop_count", "order": "descending"},
+      "axis": {"labelAngle": -45},
+      "title": "LGA"
+    }
+  },
+  "layer": [
+    {
+      "mark": {"type": "rule"},
+      "encoding": {
+        "y": {"field": "actual_stop_count", "type": "quantitative"}
+      }
+    },
+    {
+      "mark": {"type": "circle", "size": 100},
+      "encoding": {
+        "y": {
+          "field": "actual_stop_count",
+          "type": "quantitative",
+          "title": "Number of Stops"
+        },
+      "color": {
+  "field": "Region_Type",
+  "type": "nominal",
+  "scale": {
+    "domain": ["Metro", "Regional"],
+    "range": ["#0077BB", "#EE7733"]
+  }
+},  
+        "tooltip": [
+          {"field": "LGA_NAME", "type": "nominal", "title": "LGA"},
+          {"field": "actual_stop_count", "type": "quantitative", "title": "Total Stops"},
+          {"field": "Region_Type", "type": "nominal", "title": "Region Type"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "text", "dy": -15},
+      "encoding": {
+        "y": {"field": "actual_stop_count", "type": "quantitative"},
+        "text": {"field": "actual_stop_count", "type": "quantitative"}
+      }
+    },
+
+      {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "dx": 250,
+        "dy": 15,
+        "font": "Inter",
+        "fontSize": 16, 
+        "text": "Only 2 out of 10 are Regional LGAs "
+      },
+      "encoding": {
+        "x": {"value": 0},
+        "y": {"value": 0}
+      }
+    }
+
+  ]
+}

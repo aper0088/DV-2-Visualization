@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {
+    "text": "Weekly Services Per 10,000 Residents: Metro Vs Regional LGAs",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+  "width": 500,
+  "height": 300,
+  "data": { "url": "FINAL_lga_services_per_10k_edit_1.csv" },
+  "layer": [
+    {
+      "mark": "bar",
+      "encoding": {
+        "x": { 
+          "field": "weekly_services_per_10k", 
+          "type": "quantitative", 
+          "bin": {"maxbins": 15},
+          "title": "Weekly Services per 10k"
+        },
+        "y": { 
+          "aggregate": "count", 
+          "type": "quantitative",
+          "stack": "normalize", 
+          "title": "% of LGAs in this Category",
+          "axis": {"format": "%"}
+        },
+        "color": {
+  "field": "Region_Type",
+  "type": "nominal",
+  "scale": {
+    "domain": ["Metro", "Regional"],
+    "range": ["#0077BB", "#EE7733"]
+  }
+},  
+        "tooltip": [
+          {"field": "Region_Type", "type": "nominal", "title": "Region Type"},
+          {"field": "weekly_services_per_10k", "type": "quantitative", "title": "Weekly Services", "bin": {"maxbins": 15}},
+          {"aggregate": "count", "type": "quantitative", "title": "Count of LGAs"}
+        ]
+      }
+    },
+   {
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 16,
+
+
+        "align": "left",
+        "baseline": "top",
+        "dx": 70,
+        "dy": -20,
+        "lineBreak": "\n",
+        "text": "Note: Although count \n of LGA is 1 for these, \n a single LGA is \n comprised of \n multiple stations"
+      }
+    }
+  ]
+}

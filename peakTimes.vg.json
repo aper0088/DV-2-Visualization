@@ -1,0 +1,32 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
+    "text": "Total Train Distribution Per Hour",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+
+  "data": {"url": "HOURLY_SERVICES.csv"},
+  "mark": "rect",
+  "encoding": {
+    "x": {
+      "field": "hour", 
+      "type": "ordinal", 
+      "title": "Hour of Day (0-23)",
+      "sort": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
+      "axis": {"labelAngle": 0}
+    },
+    "y": {
+      "field": "Region_Type", 
+      "type": "nominal", 
+      "title": "Region",
+      "sort": ["Metro", "Regional"]
+    },
+    "color": {
+      "field": "services", 
+      "type": "quantitative", 
+      "scale": {"scheme": "viridis"},
+      "legend": {"title": "Total Trains"}
+    }
+  }
+}

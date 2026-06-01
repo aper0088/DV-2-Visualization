@@ -1,0 +1,118 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": {
+    "text": "Weekly Rail Services Per 10,000 Residents By LGA",
+    "font": "Inter",
+    "fontSize": 16 
+  },
+
+  "width": 700,
+  "height": 600,
+  "projection": {
+    "type": "mercator",
+    "center": [144.9, -37.8],
+    "scale": 7300
+  },
+  "layer": [
+    {
+      "description": "LGA Choropleth Layer",
+      "data": {
+        "url": "LGA_POLYGON.json",
+        "format": {
+          "type": "topojson",
+          "feature": "LGA_POLYGON"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.ABSLGACODE",
+          "from": {
+            "data": { "url": "FINAL_lga_services_per_10k.csv" },
+            "key": "ABSLGACODE",
+            "fields": ["LGA_NAME", "population", "actual_stop_count", "weekly_avg_services", "weekly_services_per_10k"]
+          }
+        },
+        {
+          "calculate": "datum.weekly_services_per_10k == null ? 0 : datum.weekly_services_per_10k",
+          "as": "services_display"
+        },
+        {
+          "calculate": "datum.LGA_NAME == null ? datum.properties.LGA_NAME : datum.LGA_NAME",
+          "as": "display_name"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+"color": {
+  "field": "services_display",
+  "type": "quantitative",
+  "title": "Services per 10k residents",
+ "scale": {
+            "type": "sqrt",
+            "domain": [0, 1, 50, 150, 500],
+            "range": ["#f7f7f7", "#cccccc", "#969696", "#525252", "#000000"]
+          }
+},        "tooltip": [
+          { "field": "display_name", "type": "nominal", "title": "LGA" },
+          { "field": "population", "type": "quantitative", "title": "Population", "format": "," },
+          { "field": "actual_stop_count", "type": "quantitative", "title": "Train stops", "format": ".0f" },
+          { "field": "weekly_avg_services", "type": "quantitative", "title": "Weekly services", "format": ".0f" },
+          { "field": "services_display", "type": "quantitative", "title": "Services per 10k", "format": ".2f" }
+        ]
+      }
+    },
+    {
+      "description": "Train Stations Layer",
+      "data": {
+        "url": "TrainStops.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.location_type == '1'"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 15,
+        "color": "#ff4d4d",
+        "opacity": 0.6,
+        "stroke": "#ffffff",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "stop_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "stop_lat",
+          "type": "quantitative"
+        }
+      }
+    },
+        {
+      "data": {
+        "values": [
+          {"name": "Geelong", "lon": 144.35, "lat": -38.15},
+          {"name": "Mornington", "lon": 145.03, "lat": -38.22},
+          {"name": "Ballarat", "lon": 143.85, "lat": -37.56},
+          {"name": "Bendigo", "lon": 144.28, "lat": -36.76},
+          {"name": "Traralgon", "lon": 146.54, "lat": -38.20},
+          {"name": "Warrnambool", "lon": 142.48, "lat": -38.38}
+
+        ]
+      },
+      "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "#333", "dy": -10},
+      "encoding": {
+        "longitude": {"field": "lon", "type": "quantitative"},
+        "latitude": {"field": "lat", "type": "quantitative"},
+        "text": {"field": "name", "type": "nominal"}
+      }
+    }
+
+  ]
+}

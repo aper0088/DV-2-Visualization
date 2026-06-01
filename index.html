@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria Train Accessibility Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script src="vega_lite_vis.js"></script>
+    
+    <style>
+        :root {
+            --bg: #f1f5f9;
+            --header-box: #7da5d5;
+            --accent: #1e293b;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg);
+            margin: 0; padding: 40px 20px;
+        }
+
+        .dashboard { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+
+        .section-header {
+            background-color: var(--header-box);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 60px 0 20px 0;
+            display: inline-block;
+        }
+        
+        .section-header h2 {
+            margin: 0; font-size: 1rem; text-transform: uppercase;
+            letter-spacing: 0.15em; color: var(--accent);
+        }
+
+        .chart-box {
+            background: white;
+            padding: 40px; 
+            border-radius: 12px;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            width: 100%; 
+            max-width: 900px; 
+            min-height: 200px;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+        }
+
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: #cbd5e1;
+            margin: 20px auto; 
+            border-radius: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>Train Accessibility</h1>
+    <p>A Visual Analysis Of Victoria's Train Network.</p>
+
+    <div class="section-header"><h2>Importance of Trains</h2></div>
+    <div class="chart-box"> 
+    <div id="first"></div>
+    <div>From census data spanning 2011 to 2021, trains are the most used choice of public
+        transport for commuters (census results for 2026 year are not released at the time of this visualization).</div>
+    <div class="divider"></div>
+    </div>
+
+    <div class="chart-box"> 
+    <div id="last"></div>
+    <div>In Victoria, train commuters in both Metropolitan and Regional LGAs
+        are growing.
+    </div>
+    <div class="divider"></div>
+    </div>
+
+    <div class="section-header"><h2>Railway Structure And Train Services</h2></div>
+    <div class="chart-box">
+    <div id="stop"></div>
+    <div>Train stations are predominately concentrated in Metro LGA regions. 
+         In Regional LGAs, train station infrastructure becomes more sparse as we move away from Melbourne.
+         Some Regional LGAs don't have access to any train station infrastructure in their respective region.
+    </div>
+    <div class="divider"></div>
+
+    </div>
+
+    <div class="chart-box">
+    <div id="services"></div>
+    <div>
+        There exists an imbalance in the train services relative to the population size of
+        a particular LGA. Normalized per 10,000 residents, there is a significant disparity
+        between Regional and Metro LGAs, even when looking at more popular and major regional hubs
+        such as Ballarat.
+
+    </div>
+    <div class="divider"></div>
+
+    </div>
+
+
+    <div class="chart-box"> 
+    <div id="metroVSregional"></div>
+    <div>Rail accessibility is skewed across Victoria, with metro LGAs typically having higher
+        services per 10,000 residents when compared to Regional LGAs.
+       </div>
+
+        <div class="divider"></div>
+    </div>
+
+
+
+
+    <div class="section-header"><h2>Population Impact </h2></div>
+
+    <div class="chart-box">
+    <div id="population"></div>
+    <div> 
+        This demonstrates that there is a lack of relationship between population and services.
+        even when Regional LGAs have a greater population, smaller Metropolitan LGAs still have
+        more frequent services. This suggests that Regional LGA train infrastructure are not optimized
+        to handle the growing population.
+        For instance, Greater Geelong has a large population, but are not supported by more frequent services.
+        </div>
+    <div class="divider"></div>
+
+    </div>
+
+    <div class="section-header"><h2>Wait Time Analysis</h2></div>
+    <div class="chart-box">
+        <div id="accessibility"></div>
+        
+        <div id="accessibility_2"></div>
+        <div>For both weekends and weekdays, average wait times for Regional train services are
+            higher than wait times for Metro train services, demonstrating the accessibility imbalance between these LGAs
+            in Victoria.
+        </div>
+        <div class="divider"></div>
+    </div>
+
+    <div class="section-header"><h2>Availability: Services And Location</h2></div>
+    <div class="chart-box">
+    <div id="peakTimes"></div>
+    <div>Metropolitan LGAs have significantly more services per hour when compared to Regional LGAs
+        throughout all periods of the day.
+    </div>
+    <div class="divider"></div>
+
+     </div>
+
+
+     <div class="chart-box"> 
+    <div id="stopVSlga"></div>
+    <div>Metro LGAs have significantly more train stations compared to Regional.
+    This demonstrates that Regional LGAs have lower accessibility to train stations,
+     and therefore trains. </div>
+    <div class="divider"></div>
+
+    </div>
+
+
+    <div class="section-header"><h2>Data Sources</h2></div>
+
+    <div class="chart-box"> 
+        <ul>
+            <li>Australian Bureau of Statistics. (2021). Census DataPacks | Australian Bureau of Statistics. Www.abs.gov.au. https://www.abs.gov.au/census/find-census-data/datapacks</li>
+            <li>GTFS Schedule - GTFS Schedule - Open Data - Transport Victoria. (2026). Vic.gov.au. https://opendata.transport.vic.gov.au/dataset/gtfs-schedule/resource/fb152201-859f-4882-9206-b768060b50ad</li>
+            <li>Australian Bureau of Statistics. (2022, March 11). Australia’s journey to work. Australian Bureau of Statistics. https://www.abs.gov.au/articles/australias-journey-work</li>
+            <li>Monthly public transport patronage by mode - Victorian Government Data Vic. (2021). Vic.gov.au. https://discover.data.vic.gov.au/en_AU/dataset/monthly-public-transport-patronage-by-mode</li>
+            <li>Vicmap Admin - Local Government Area (LGA) Polygon Aligned to Property - Victorian Government Data Directory. (2022). Vic.gov.au. https://discover.data.vic.gov.au/dataset/vicmap-admin-local-government-area-lga-polygon-aligned-to-property</li>
+        </ul>
+        <div class="divider"></div>
+    </div>
+
+    <div class="section-header"><h2>Author</h2></div>
+
+    <div class="chart-box"> 
+        <div>Author Name: Anupa Peramuna</div>
+        <div>Last Updated: 1/06/2026</div>
+    <div class="divider"></div>
+    </div>
+
+
+
+
+
+</div>
+
+</body>
+</html>
